@@ -4,11 +4,6 @@ import { getPosts } from '../services'
 
 export default function Home({ posts }) {
 
-  // const posts = [
-  //   {title: 'MERN STACK IS A BEST', desc: "React, express, node, mongo"},
-  //   {title: 'its cool app', desc: "It's a second post for this app"},
-  // ]
-
   return (
     <div className="container mx-auto px-10 mb-8">
       <Head>
