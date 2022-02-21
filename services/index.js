@@ -34,6 +34,40 @@ export const getPosts = async () => {
     return result.postsConnection.edges
 }
 
+export const getPostDetails = async (slug) => {
+    const query = gql`
+        query getPostDetails($slug: String!) {
+            post(where: {slug: $slug}) {
+                author {
+                    biography
+                    id
+                    name
+                    picture {
+                            url
+                        }
+                    }
+                createdAt
+                slug
+                title
+                excerpt
+                coverImage {
+                    url
+                }
+                content {
+                    raw
+                    markdown
+                    html
+                    text
+                }
+            }
+        }
+    `
+
+    const result = await request(graphqlAPI, query, { slug });
+
+    return result.post
+}
+
 export const getRecentPosts = async () => {
     const query = gql`
         query getPostDetails() {
@@ -56,11 +90,11 @@ export const getRecentPosts = async () => {
     return results.posts
 }
 
-export const getRelatedPosts = async() => {
+export const getRelatedPosts = async(categories, slug) => {
     const query = gql`
-        query getPostDetails($slug: String!, $categories: [String!]) {
+        query getPostDetails($slug: String!) {
             posts(
-                where: {slug_not: $slug, AND: {categories_some: {slug_in: $categories}}}
+                where: {slug_not: $slug}
                 last: 3
             ) {
                 title
@@ -73,7 +107,7 @@ export const getRelatedPosts = async() => {
         }
     `
 
-    const results = await request(graphqlAPI, query);
+    const results = await request(graphqlAPI, query, { slug });
 
     return results.posts
 }
@@ -91,4 +125,16 @@ export const getCategories = async () => {
   const result = await request(graphqlAPI, query);
 
   return result.posts;
+};
+
+export const submitComment = async (obj) => {
+    const result = await fetch('/api/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(obj),
+    });
+  
+    return result.json();
 };

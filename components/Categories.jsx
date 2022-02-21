@@ -16,8 +16,8 @@ const Categories = () => {
       <h3 className="text-xl mb-8 font-semibold-border-b pb-4">
         Categories
       </h3>
-      {cates.map(category => (
-        <Link href={`/category/${category.slug}`}>
+      {cates.map((category, index) => (
+        <Link href={`/category/${category.slug}`} key={index}>
           <span className='cursor-pointer block mb-3 pb-3'>
             {category.tags[0]}
           </span>
